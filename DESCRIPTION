@@ -1,0 +1,10 @@
+Package: cohetsurr
+Type: Package
+Title: Assessing Complex Heterogeneity in Surrogacy
+Version: 1.0
+Date: 2024-04-18
+Author: Rebecca Knowlton
+Maintainer: Rebecca Knowlton <rknowlton@utexas.edu>
+Description: Provides functions to assess and test for complex heterogeneity in the utility of a surrogate marker with respect to multiple baseline covariates, using both a parametric model and a semiparametric two-step model. More details will be available in the future in: Knowlton, R., Tian, L., Parast, L. (2024) ``A General Framework to Assess Complex Heterogeneity in the Utility of a Surrogate Marker."
+License: GPL
+Imports: stats, matrixStats, mvtnorm

@@ -1,0 +1,4 @@
+importFrom(stats, bw.nrd, sd, mad, var, p.adjust, quantile, lm, predict, prcomp, dnorm, anova, cor, na.omit)
+importFrom(matrixStats, rowQuantiles)
+importFrom(mvtnorm, rmvnorm)
+export("complex.heterogeneity")
