@@ -1,0 +1,98 @@
+---
+title: "Tutorial for the cohetsurr package"
+output:
+  html_document:
+---
+
+```{r global_options, echo=FALSE}
+knitr::opts_chunk$set(fig.width=7, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=60))
+```
+We will go through an example using the main functions in the **cohetsurr** R package. First, download the **cohetsurr_1.0.tar.gz** file in this repository and install the package from the source within R/RStudio. The **ggplot2** package also needs to be installed from CRAN as we will use it to visualize the results Then, load the packages as follows:
+
+```{r message=FALSE}
+#load package
+library(cohetsurr)
+library(ggplot2)
+```
+
+This package provides functions to assess and test for complex heterogeneity in the strength of a surrogate marker with respect to multiple baseline covariates, using both a parametric model and a semiparametric two-step model. The package includes a hypothetical example dataset which contains 1000 observations from a treatment group and 1000 observations from a control group. Let's take a look at the data:
+
+```{r}
+data(exampledata)
+names(exampledata)
+```
+
+Within the dataset, **y** denotes the primary outcome, **s** denotes the surrogate marker, **a** denotes the randomized treatment assignment where 1 indicates treatment and 0 indicates control, **w1** is a baseline covariate, and **w2** is a second baseline covariate (we do not need **w1.grid** or **w2.grid** for this illustration). 
+
+The main function of the package is **complex.heterogeneity** which assesses complex heterogeneity in the strength of a surrogate marker by estimating the proportion of the treatment effect explained (PTE) by the surrogate marker as a function of multiple baseline covariates. Optionally, the function will test for evidence of heterogeneity overall and can flag regions where the proportion of treatment effect explained is above a given threshold. The required arguments are **y** which is the primary outcome, **s** which is the surrogate marker, **a** which is the treatment indicator, and **W.mat** which is the matrix of  baseline covariates. Let's take a look:
+
+```{r cache=TRUE}
+cohet = complex.heterogeneity(y = exampledata$y, s = exampledata$s, a = exampledata$a, W.mat = matrix(cbind(exampledata$w1, exampledata$w2), ncol = 2))
+names(cohet)
+cohet$return.grid
+```
+The function will estimate the PTE on a grid of **W.mat**, specified by the argument **W.grid**; if this is not provided by the user, the default is created using a grid of 4 equally spaced points for each baseline covariate. In the example above, we do not provide a grid and thus a grid is made as described resulting in 16 grid points where PTE is estimated. The returned **return.grid** shows the grid points in the first two columns, and the estimates of the treatment effect on the primary outcome, **delta**, the residual treatment effect, **delta.s**, and the PTE, **R.s**. Note that values of **R.s** close to 1 indicate a strong surrogate while values close to 0 indicate a weak surrogate. We can visualize these results using a heatmap:
+
+```{r cache=TRUE}
+#rename first two columns
+data.for.plot = cohet$return.grid
+names(data.for.plot)[1:2] = c("W1","W2")
+#create plot
+
+ggplot(data.for.plot, aes(W1, W2, fill= R.s)) + geom_tile() + scale_fill_gradient(low="yellow", high="red", limits = c(min(data.for.plot$R.s),max(data.for.plot$R.s))) + xlab("W1") + ylab("W2") + labs(fill = expression(paste(R[S], "(W)",sep="")), title = "PTE Estimate")
+
+```
+
+To request the formal test for heterogeneity, use **test=TRUE**; to request variance estimates, use **variance=TRUE**. Variance estimation is done via the bootstrap and thus, can be computationally intensive. 
+
+```{r cache=TRUE}
+#with test and variance estimation
+cohet = complex.heterogeneity(y = exampledata$y, s = exampledata$s, a = exampledata$a, W.mat = matrix(cbind(exampledata$w1, exampledata$w2), ncol = 2), test=TRUE, var=TRUE)
+names(cohet)
+names(cohet$return.grid)
+cohet$pval
+```
+Notice that **return.grid** now includes variance estimates and confidence interval bounds. The p-value for the heterogeneity test is significant thus indicating that there is evidence of heterogeneity in the surrogate strength with respect to these two baseline covariates. 
+
+By default, the function will employ parametric estimation; this can be changed by specifying **type="two step"** for two-step semiparametric estimation or **type="both"** for both estimates. As shown above, the resulting estimates can be visualized using a heatmap. The test and variance estimates can also be requested as above; this will be computationally intensive because it involves both kernel smoothing and bootstrapping, and the computation time will grow as the grid size increases.  
+
+```{r cache=TRUE}
+#now with two-step semiparametric estimation
+cohet = complex.heterogeneity(y = exampledata$y, s = exampledata$s, a = exampledata$a, W.mat = matrix(cbind(exampledata$w1, exampledata$w2), ncol = 2), type="two step")
+names(cohet)
+cohet$return.grid
+
+#rename first two columns
+data.for.plot = cohet$return.grid
+names(data.for.plot)[1:2] = c("W1","W2")
+
+#create plot
+ggplot(data.for.plot, aes(W1, W2, fill= R.s.two.step)) + geom_tile() + scale_fill_gradient(low="yellow", high="red", limits = c(min(data.for.plot$R.s),max(data.for.plot$R.s))) + xlab("W1") + ylab("W2") + labs(fill = expression(paste(R[S], "(W)",sep="")), title = "PTE Estimate")
+
+#with test and variance estimation
+cohet = complex.heterogeneity(y = exampledata$y, s = exampledata$s, a = exampledata$a, W.mat = matrix(cbind(exampledata$w1, exampledata$w2), ncol = 2), type = "two step", test=TRUE, var=TRUE)
+cohet$pval
+
+```
+
+Here, the p-value for the heterogeneity test based on the semiparametric estimate is significant with p=0.017, thus indicating that there is evidence of heterogeneity in the surrogate strength with respect to these two baseline covariates. 
+
+Lastly, the **threshold** argument within the function can be used to flag regions of covariate space where the estimate PTE is at least that high. For example, if **threshold=0.75** the function will implement procedures to flag which regions of the **W.grid** have a PTE equal to 0.75 or higher. Again, this will be computationally intensive. This can be visualized with a tile plot as illustrated below, where red indicates that the PTE is identified to be greater than or equal to the threshold for that gridpoint, and grey indicates it is less than the threshold. 
+
+```{r cache=TRUE}
+cohet = complex.heterogeneity(y = exampledata$y, s = exampledata$s, a = exampledata$a, W.mat = matrix(cbind(exampledata$w1, exampledata$w2), ncol = 2), test=TRUE, var=TRUE, threshold = 0.75)
+
+#rename first two columns
+data.for.plot = cohet$return.grid
+names(data.for.plot)[1:2] = c("W1","W2")
+data.for.plot$threshold.flag = as.factor(data.for.plot$threshold.flag)
+
+#create plot
+ggplot(data.for.plot, aes(W1, W2, fill= threshold.flag)) + geom_tile() + xlab("W1") + ylab("W2") + scale_fill_manual(breaks = c("0","1"), values = c("light grey","red"), labels = c("Not in region", "In region")) + labs(fill = "R > 0.75", title = "True Region R > 0.75")
+
+```
+
+
+That's all for now!
+
+---------
