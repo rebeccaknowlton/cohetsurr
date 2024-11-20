@@ -383,12 +383,12 @@ illustration).</p>
 <p>The main function of the package is
 <strong>complex.heterogeneity</strong> which assesses complex
 heterogeneity in the strength of a surrogate marker by estimating the
-proportion of treatment effect explained (PTE) by the surrogate marker
-as a function of multiple baseline covariates. Optionally, the function
-will test for evidence of heterogeneity overall and can flag regions
-where the proportion of treatment effect explained is above a given
-threshold. The required arguments are <strong>y</strong> which is the
-primary outcome, <strong>s</strong> which is the surrogate marker,
+proportion of the treatment effect explained (PTE) by the surrogate
+marker as a function of multiple baseline covariates. Optionally, the
+function will test for evidence of heterogeneity overall and can flag
+regions where the proportion of treatment effect explained is above a
+given threshold. The required arguments are <strong>y</strong> which is
+the primary outcome, <strong>s</strong> which is the surrogate marker,
 <strong>a</strong> which is the treatment indicator, and
 <strong>W.mat</strong> which is the matrix of baseline covariates. Let’s
 take a look:</p>
@@ -508,6 +508,10 @@ cohet = complex.heterogeneity(y = exampledata$y, s = exampledata$s,
         ncol = 2), type = &quot;two step&quot;, test = TRUE, var = TRUE)
 cohet$pval</code></pre>
 <pre><code>## [1] 0.017</code></pre>
+<p>Here, the p-value for the heterogeneity test based on the
+semiparametric estimate is significant with p=0.017, thus indicating
+that there is evidence of heterogeneity in the surrogate strength with
+respect to these two baseline covariates.</p>
 <p>Lastly, the <strong>threshold</strong> argument within the function
 can be used to flag regions of covariate space where the estimate PTE is
 at least that high. For example, if <strong>threshold=0.75</strong> the
