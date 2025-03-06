@@ -7,7 +7,7 @@ output:
 ```{r global_options, echo=FALSE}
 knitr::opts_chunk$set(fig.width=7, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=60))
 ```
-We will go through an example using the main functions in the **cohetsurr** R package. First, download the **cohetsurr_1.0.tar.gz** file in this repository and install the package from the source within R/RStudio. The **ggplot2** package also needs to be installed from CRAN as we will use it to visualize the results Then, load the packages as follows:
+If you are viewing the html version of this tutorial, you can find the R markdown file here: <https://github.com/rebeccaknowlton/cohetsurr>, it is file called cohetsurr_tutorial.Rmd. We will go through an example using the main functions in the **cohetsurr** R package which is can be installed from CRAN.  The **ggplot2** package also needs to be installed from CRAN as we will use it to visualize the results. Then, load the packages as follows:
 
 ```{r message=FALSE}
 #load package
