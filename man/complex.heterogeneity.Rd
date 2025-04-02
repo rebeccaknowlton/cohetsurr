@@ -48,7 +48,7 @@ A list is returned:
 \item{pval}{p-value(s) from the F test and the two step omnibus test for heterogeneity, depending on type argument}
 }
 \references{
-Knowlton, R., Tian, L., Parast, L. (2024). "A General Framework to Assess Complex Heterogeneity in the Utility of a Surrogate Marker." Under Review.
+Knowlton, R., Tian, L., & Parast, L. (2025). A General Framework to Assess Complex Heterogeneity in the Strength of a Surrogate Marker. Statistics in Medicine, 44(5), e70001
 }
 \author{
 Rebecca Knowlton
