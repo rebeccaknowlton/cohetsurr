@@ -4,7 +4,7 @@
 Calculate bootstrapped variance estimates in an observational setting.
 }
 \description{
-Calculates bootstrapped variance estimates of delta, delta.s, and R.s, and optionally calculates p-values for identifying strong surrogates.
+Calculates bootstrapped variance estimates of delta, delta.s, and R.s, and optionally calculates p-values for for identifying individual for whom the surrogate is strong.
 }
 \usage{
 obs.boot.var(df.train, df.test, type, numeric_predictors, categorical_predictors, 
