@@ -1,4 +1,6 @@
-importFrom(stats, bw.nrd, sd, mad, var, p.adjust, quantile, lm, predict, prcomp, dnorm, anova, cor, na.omit)
+importFrom(stats, bw.nrd, sd, mad, var, p.adjust, quantile, lm, predict, prcomp, dnorm, anova, cor, na.omit, as.formula, model.matrix)
 importFrom(matrixStats, rowQuantiles)
 importFrom(mvtnorm, rmvnorm)
-export("complex.heterogeneity")
+importFrom(mgcv, gam)
+importFrom(grf, regression_forest)
+export("complex.heterogeneity", "obs.het.surr")
