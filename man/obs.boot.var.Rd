@@ -4,7 +4,7 @@
 Calculate bootstrapped variance estimates in an observational setting.
 }
 \description{
-Calculates bootstrapped variance estimates of delta, delta.s, and R.s, and optionally calculates p-values for for identifying individual for whom the surrogate is strong.
+Calculates bootstrapped variance estimates of delta, delta.s, and R.s, and optionally calculates p-values for identifying individuals for whom the surrogate is strong.
 }
 \usage{
 obs.boot.var(df.train, df.test, type, numeric_predictors, categorical_predictors, 
@@ -27,7 +27,7 @@ The column names in the dataframes that represent numeric baseline covariates.
 The column names in the dataframes that represent categorical baseline covariates.
 }
   \item{threshold}{
-An optional threshold to test individuals for the null hypothesis that PTE > threshold.
+An optional threshold to test individuals for the null hypothesis that PTE is greater than the threshold.
 }
   \item{use.actual.control.S}{
 TRUE or FALSE, if user prefers to use the actual observed values for the surrogate in the control group instead of predicting values from the base learners.

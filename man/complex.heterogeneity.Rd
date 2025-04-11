@@ -1,10 +1,10 @@
 \name{complex.heterogeneity}
 \alias{complex.heterogeneity}
 \title{
-Estimates the proportion of treatment effect explained by the surrogate marker as a function of multiple baseline covariates.
+Estimates the proportion of treatment effect explained by the surrogate marker as a function of multiple baseline covariates in a randomized treatment setting.
 }
 \description{
-Assesses complex heterogeneity in the utility of a surrogate marker by estimating the proportion of treatment effect explained by the surrogate marker as a function of multiple baseline covariates. Optionally, tests for evidence of heterogeneity overall and flags regions where the proportion of treatment effect explained is above a given threshold.
+Assesses complex heterogeneity in the utility of a surrogate marker by estimating the proportion of treatment effect explained by the surrogate marker as a function of multiple baseline covariates in a randomized treatment setting. Optionally, tests for evidence of heterogeneity overall and flags regions where the proportion of treatment effect explained is above a given threshold.
 }
 \usage{
 complex.heterogeneity(y, s, a, W.mat, type = "model", variance = FALSE, 
@@ -18,10 +18,10 @@ y, the outcome
 s, the surrogate marker
 }
   \item{a}{
-a, the treatment assignment with 1 indicating the treatment group and 0 indicating the control group
+a, the treatment assignment with 1 indicating the treatment group and 0 indicating the control group, assumed to be randomized
 }
   \item{W.mat}{
-matrix of baseline covariate observations, where the first column is W1, second columns is W2, and so on.
+matrix of baseline covariate observations, where the first column is W1, second columns is W2, etc.
 }
   \item{type}{
 options are "model", "two step", or "both"; specifies the estimation method that should be used for the proportion of treatment effect explained
@@ -45,10 +45,10 @@ threshold to flag regions where the estimated proportion of the treatment effect
 \value{
 A list is returned:
 \item{return.grid}{grid of estimates for the overall treatment effect, the residual treatment effect, and the proportion of treatment effect explained as a function of the baseline covariates, W. Includes variance estimates and regions flagged above the threshold, if specified by the user.}
-\item{pval}{p-value(s) from the F test and the two step omnibus test for heterogeneity, depending on type argument}
+\item{pval}{p-value(s) from the F test and the two step omnibus test for heterogeneity, depending on type argument.}
 }
 \references{
-Knowlton, R., Tian, L., & Parast, L. (2025). A General Framework to Assess Complex Heterogeneity in the Strength of a Surrogate Marker. Statistics in Medicine, 44(5), e70001
+Knowlton, R., Tian, L., & Parast, L. (2025). A General Framework to Assess Complex Heterogeneity in the Strength of a Surrogate Marker. Statistics in Medicine, 44(5), e70001.
 }
 \author{
 Rebecca Knowlton
@@ -62,18 +62,4 @@ Rebecca Knowlton
                         W.mat = matrix(cbind(exampledata$w1, exampledata$w2), ncol = 2),
                         type = "model",
                         W.grid = matrix(cbind(exampledata$w1.grid, exampledata$w2.grid),ncol=2))
-  #computationally intensive
-  \donttest{
-    complex.heterogeneity(y = exampledata$y,
-                          s = exampledata$s,
-                          a = exampledata$a,
-                          W.mat = matrix(cbind(exampledata$w1, 
-                          exampledata$w2), ncol = 2),
-                          type = "both",
-                          variance = TRUE,
-                          test = TRUE,
-                          W.grid = matrix(cbind(exampledata$w1.grid, 
-                          exampledata$w2.grid), ncol = 2),
-                          threshold = 0.75)
-  }
 }

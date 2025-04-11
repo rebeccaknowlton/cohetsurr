@@ -1,10 +1,10 @@
 \name{boot.var}
 \alias{boot.var}
 \title{
-Performs bootstrap estimation procedures for the variance of the proportion of treatment effect explained, the omnibus test, and identifying a region above a treshold
+Performs bootstrap estimation procedures for the variance of the proportion of treatment effect explained, the omnibus test, and identifying a region above a treshold.
 }
 \description{
-Performs bootstrap estimation procedures for the variance of the proportion of treatment effect explained, the omnibus test, and identifying a region above a treshold
+Performs bootstrap estimation procedures for the variance of the proportion of treatment effect explained, the omnibus test, and identifying a region above a treshold in a randomized treatment setting.
 }
 \usage{
 boot.var(data.control, data.treat, W.grid.expand, type, test = FALSE, 
@@ -42,6 +42,6 @@ threshold to flag regions where the estimated proportion of the treatment effect
 \value{
 A list is returned:
 \item{return.grid}{grid of variance estimates for the overall treatment effect, the residual treatment effect, and the proportion of treatment effect explained as a function of the baseline covariates, W. If requested by user, includes regions flagged above the threshold.}
-\item{pval}{p-value(s) from the F test and the two step omnibus test for heterogeneity, depending on type argument}
+\item{pval}{p-value(s) from the F test and the two step omnibus test for heterogeneity, depending on type argument.}
 }
 \keyword{internal}

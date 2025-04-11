@@ -17,7 +17,7 @@ Example training data for observational setting
     \item{\code{X4}}{a numeric baseline covariate of interest}
     \item{\code{X5}}{a numeric baseline covariate of interest}
     \item{\code{X6}}{a numeric baseline covariate of interest}
-    \item{\code{G}}{the treatment assignment, where 1 indicates treated and 0 indicates control}
+    \item{\code{G}}{the non-randomized treatment assignment, where 1 indicates treated and 0 indicates control}
     \item{\code{S}}{the surrogate marker}
     \item{\code{Y}}{the primary outcome}
   }

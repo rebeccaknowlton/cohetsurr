@@ -1,7 +1,7 @@
 \name{obs.het.surr}
 \alias{obs.het.surr}
 \title{
-Estimate the proportion of the treatment effect explained by the surrogate marker as a function of multiple baseline covariates in an observational setting
+Estimate the proportion of the treatment effect explained by the surrogate marker as a function of multiple baseline covariates in an observational setting.
 }
 \description{
 Assesses surrogate heterogeneity in real world data by estimating the proportion of the treatment effect explained as a function of baseline covariates. Optionally tests individuals for strong surrogacy based on a threshold.
@@ -12,22 +12,22 @@ obs.het.surr(df.train, df.test, type, var.want = FALSE, threshold = NULL,
 }
 \arguments{
   \item{df.train}{
-A dataframe containing training data. Must have columns G (treatment assignment), S (surrogate marker), and Y (primary outcome), in addition to the baseline covariates of interest.
+dataframe containing training data; must have columns G (treatment assignment), S (surrogate marker), and Y (primary outcome), in addition to the baseline covariates of interest
 }
   \item{df.test}{
-A dataframe containing testing data. Must contain the same baseline covariate columns as the training data.
+dataframe containing testing data; must contain the same baseline covariate columns as the training data
 }
   \item{type}{
-Options are "linear", "gam", "trees", or "all"; type of base learners to use.
+options are "linear", "gam", "trees", or "all"; type of base learners to use
 }
   \item{var.want}{
-TRUE or FALSE, if variance estimates are wanted.
+TRUE or FALSE, if variance estimates are wanted
 }
   \item{threshold}{
-An optional threshold to test individuals for the null hypothesis that PTE > threshold; must have var.want = TRUE to return p-values.
+optional threshold to test individuals for the null hypothesis that PTE is greater than the threshold; must have var.want = TRUE to return p-values
 }
   \item{use.actual.control.S}{
-TRUE or FALSE, if user prefers to use the actual observed values for the surrogate in the control group instead of predicting values from the base learners.
+TRUE or FALSE, if user prefers to use the actual observed values for the surrogate in the control group instead of predicting values from the base learners
 }
 }
 \value{

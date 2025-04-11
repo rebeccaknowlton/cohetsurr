@@ -1,10 +1,10 @@
 \name{two.step.est}
 \alias{two.step.est}
 \title{
-Estimates the proportion of treatment effect explained as a function of multiple baseline covariates, W, using a two step, semiparametric model
+Estimates the proportion of treatment effect explained as a function of multiple baseline covariates, W, using a two step, semiparametric model. 
 }
 \description{
-Estimates the proportion of treatment effect explained as a function of multiple baseline covariates, W, using a two step, semiparametric model
+Estimates the proportion of treatment effect explained as a function of multiple baseline covariates, W, using a two step, semiparametric model in a randomized treatment setting.
 }
 \usage{
 two.step.est(data.control, data.treat, W.grid.expand.function)
@@ -21,6 +21,6 @@ expanded version of the W grid of baseline covariates, where each row is a speci
 }
 }
 \value{
-grid of estimates of the proportion of treatment effect explained, the overall treatment effect, and the residual treatment effect for the given baseline covariate combinations
+A grid of estimates is returned of the proportion of treatment effect explained, the overall treatment effect, and the residual treatment effect for the given baseline covariate combinations.
 }
 \keyword{internal}

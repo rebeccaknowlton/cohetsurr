@@ -13,7 +13,7 @@ A list with 7 elements representing 1000 observations from a treatment group and
 \describe{
   \item{\code{y}}{the outcome}
   \item{\code{s}}{the surrogate marker}
-  \item{\code{a}}{the treatment assignment, where 1 indicates treatment and 0 indicates control}
+  \item{\code{a}}{the randomized treatment assignment, where 1 indicates treatment and 0 indicates control}
   \item{\code{w1}}{the first baseline covariate of interest}
   \item{\code{w2}}{the second baseline covariate of interest}
   \item{\code{w1.grid}}{the grid of first baseline covariate values to provide estimates for}
