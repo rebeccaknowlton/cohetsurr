@@ -7,7 +7,7 @@ output:
 ```{r global_options, echo=FALSE}
 knitr::opts_chunk$set(fig.width=7, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=60))
 ```
-If you are viewing the html version of this tutorial, you can find the R markdown file here: <https://github.com/rebeccaknowlton/cohetsurr>, it is file called cohetsurr_tutorial.Rmd. We will go through an example using the main functions in the **cohetsurr** R package which is can be installed from CRAN.  The **ggplot2** package also needs to be installed from CRAN as we will use it to visualize the results. Then, load the packages as follows:
+If you are viewing the html version of this tutorial, you can find the R markdown file here: <https://github.com/rebeccaknowlton/cohetsurr>. It is the file called cohetsurr_tutorial.Rmd. In this tutorial we will go through examples using the main functions in the **cohetsurr** R package which can be installed from CRAN.  The **ggplot2** package also needs to be installed from CRAN (to go through this tutorial) as we will use it to visualize the results. Then, load the packages as follows:
 
 ```{r message=FALSE}
 # set seed for reproducibility 
@@ -17,7 +17,11 @@ library(cohetsurr)
 library(ggplot2)
 ```
 
-This package provides functions to assess and test for complex heterogeneity in the strength of a surrogate marker with respect to multiple baseline covariates in a randomized setting, using both a parametric model and a semiparametric two-step model. The package includes a hypothetical example dataset which contains 1000 observations from a treatment group and 1000 observations from a control group. Let's take a look at the data:
+The **cohetsurr** package provides functions to assess and test for complex heterogeneity in the strength of a surrogate marker with respect to multiple baseline covariates in either a randomized treatment setting or observational setting. For a randomized treatment setting, the functions assess and test for heterogeneity using both a parametric model and a semiparametric two-step model. For an observational setting, functions in this package assess complex heterogeneity in the strength of a surrogate marker using meta-learners, with options for different base learners. We will start with the randomized setting, and then move on to the observational setting.
+
+## Randomized Treatment Setting
+
+The package includes a hypothetical example dataset which contains 1000 observations from a treatment group and 1000 observations from a control group, where treatment assignment is randomized. Let's take a look at the data:
 
 ```{r}
 data(exampledata)
@@ -26,16 +30,16 @@ names(exampledata)
 
 Within the dataset, **y** denotes the primary outcome, **s** denotes the surrogate marker, **a** denotes the randomized treatment assignment where 1 indicates treatment and 0 indicates control, **w1** is a baseline covariate, and **w2** is a second baseline covariate (we do not need **w1.grid** or **w2.grid** for this illustration). 
 
-The main function of the package is **complex.heterogeneity** which assesses complex heterogeneity in the strength of a surrogate marker by estimating the proportion of the treatment effect explained (PTE) by the surrogate marker as a function of multiple baseline covariates. Optionally, the function will test for evidence of heterogeneity overall and can flag regions where the proportion of treatment effect explained is above a given threshold. The required arguments are **y** which is the primary outcome, **s** which is the surrogate marker, **a** which is the treatment indicator, and **W.mat** which is the matrix of  baseline covariates. Let's take a look:
+The main function for the randomized setting is **complex.heterogeneity** which assesses complex heterogeneity in the strength of a surrogate marker by estimating the proportion of the treatment effect explained (PTE) by the surrogate marker as a function of multiple baseline covariates. Optionally, the function will test for evidence of heterogeneity overall and can flag regions where the proportion of treatment effect explained is above a given threshold. The required arguments are **y** which is the primary outcome, **s** which is the surrogate marker, **a** which is the treatment indicator, and **W.mat** which is the matrix of  baseline covariates. Let's take a look:
 
-```{r cache=FALSE}
+```{r cache=TRUE}
 cohet = complex.heterogeneity(y = exampledata$y, s = exampledata$s, a = exampledata$a, W.mat = matrix(cbind(exampledata$w1, exampledata$w2), ncol = 2))
 names(cohet)
 cohet$return.grid
 ```
 The function will estimate the PTE on a grid of **W.mat**, specified by the argument **W.grid**; if this is not provided by the user, the default is created using a grid of 4 equally spaced points for each baseline covariate. In the example above, we do not provide a grid and thus a grid is made as described resulting in 16 grid points where PTE is estimated. The returned **return.grid** shows the grid points in the first two columns, and the estimates of the treatment effect on the primary outcome, **delta**, the residual treatment effect, **delta.s**, and the PTE, **R.s**. Note that values of **R.s** close to 1 indicate a strong surrogate while values close to 0 indicate a weak surrogate. We can visualize these results using a heatmap:
 
-```{r cache=FALSE}
+```{r cache=TRUE}
 #rename first two columns
 data.for.plot = cohet$return.grid
 names(data.for.plot)[1:2] = c("W1","W2")
@@ -47,7 +51,7 @@ ggplot(data.for.plot, aes(W1, W2, fill= R.s)) + geom_tile() + scale_fill_gradien
 
 To request the formal test for heterogeneity, use **test=TRUE**; to request variance estimates, use **variance=TRUE**. Variance estimation is done via the bootstrap and thus, can be computationally intensive. 
 
-```{r cache=FALSE}
+```{r cache=TRUE}
 #with test and variance estimation
 cohet = complex.heterogeneity(y = exampledata$y, s = exampledata$s, a = exampledata$a, W.mat = matrix(cbind(exampledata$w1, exampledata$w2), ncol = 2), test=TRUE, var=TRUE)
 names(cohet)
@@ -58,7 +62,7 @@ Notice that **return.grid** now includes variance estimates and confidence inter
 
 By default, the function will employ parametric estimation; this can be changed by specifying **type="two step"** for two-step semiparametric estimation or **type="both"** for both estimates. As shown above, the resulting estimates can be visualized using a heatmap. The test and variance estimates can also be requested as above; this will be computationally intensive because it involves both kernel smoothing and bootstrapping, and the computation time will grow as the grid size increases.  
 
-```{r cache=FALSE}
+```{r cache=TRUE}
 #now with two-step semiparametric estimation
 cohet = complex.heterogeneity(y = exampledata$y, s = exampledata$s, a = exampledata$a, W.mat = matrix(cbind(exampledata$w1, exampledata$w2), ncol = 2), type="two step")
 names(cohet)
@@ -81,7 +85,7 @@ Here, the p-value for the heterogeneity test based on the semiparametric estimat
 
 Lastly, the **threshold** argument within the function can be used to flag regions of covariate space where the estimate PTE is at least that high. For example, if **threshold=0.75** the function will implement procedures to flag which regions of the **W.grid** have a PTE equal to 0.75 or higher. Again, this will be computationally intensive. This can be visualized with a tile plot as illustrated below, where red indicates that the PTE is identified to be greater than or equal to the threshold for that gridpoint, and grey indicates it is less than the threshold. 
 
-```{r cache=FALSE}
+```{r cache=TRUE}
 cohet = complex.heterogeneity(y = exampledata$y, s = exampledata$s, a = exampledata$a, W.mat = matrix(cbind(exampledata$w1, exampledata$w2), ncol = 2), test=TRUE, var=TRUE, threshold = 0.75)
 
 #rename first two columns
@@ -94,7 +98,9 @@ ggplot(data.for.plot, aes(W1, W2, fill= threshold.flag)) + geom_tile() + xlab("W
 
 ```
 
-If we alternatively have an observational setting, where treatment is not randomized, the package includes corresponding functions to assess complex heterogeneity in the strength of a surrogate marker using meta-learners. In the observational setting, the user must specify a training and testing set of data. Again, the package includes an example hypothetical dataset that we can look at:
+## Non-Randomized Treatment Setting
+
+We now move on to the non-randomized i.e. observational setting. In the observational setting, the user must specify a training and testing set of data. All this means is that you should take your dataset and randomly split it into a training set and a test set, for example 90\% and 10\%, respectively. Again, the package includes example hypothetical datasets that we will use for illustration.
 
 ```{r}
 data(obs_exampledata_train)
@@ -103,15 +109,15 @@ data(obs_exampledata_test)
 head(obs_exampledata_test)
 ```
 
-The example training set has 1800 observations, and the example testing set has 200 observations. The covariates **X1** through **X6** are baseline covariates that may be confounders associated with treatment assignment. In these datasets, **G** denotes the treatment assignment (where a value of 1 indicates assignment to the treatment group, and 0 indicates assignment to the control group); **S** denotes the surrogate marker; and **Y** denotes the primary outcome.
+The example training set has 1800 observations, and the example testing set has 200 observations. The covariates **X1** through **X6** are baseline covariates that may be confounders associated with treatment assignment. In these datasets, **G** denotes the treatment group (where a value of 1 indicates  the treatment group, and 0 indicates the control group); **S** denotes the surrogate marker; and **Y** denotes the primary outcome.
 
-The main function for observational data is **obs.het.surr**, which (similar to the randomized setting) assesses complex heterogeneity in the strength of a surrogate marker by estimating the proportion of the treatment effect explained (PTE) by the surrogate marker as a function of the baseline covariates. The required arguments are **df.train**, the dataframe containing training data; **df.test**, the dataframe containing testing data; and **type**, the type of base learners to use ("linear", "gam", "trees", or "all"). The dataframes are required to have columns named **G**, **S**, and **Y**. Any remaining columns will be taken as the baseline covariates. Let's take a look, using linear base learners:
+The main function for observational data is **obs.het.surr**, which (similar to the randomized setting) assesses complex heterogeneity in the strength of a surrogate marker by estimating the proportion of the treatment effect explained (PTE) by the surrogate marker as a function of the baseline covariates. The required arguments are **df.train**, the dataframe containing training data; **df.test**, the dataframe containing testing data; and **type**, the type of base learners to use. Your options for the base learners are "linear", "gam", "trees", or "all" (which means all 3 learners are implemented). The dataframes are required to have columns named **G**, **S**, and **Y**. Any remaining columns will be taken as the baseline covariates. Let's take a look, using linear base learners:
 
 ```{r}
 obshet = obs.het.surr(df.train = obs_exampledata_train, df.test = obs_exampledata_test, type = "linear")
 head(obshet)
 ```
-Notice how the function returns the **df.test** dataframe, but with columns appended individual-level estimates of the treatment effect on the primary outcome, **delta**; the residual treatment effect, **delta.s**; and the PTE, **R.s**. We can examine how the estimated PTE for individuals in the testing set varies using a histogram and a five number summary, and recalling that values closer to 1 reflect a strong surrogate:
+Notice how the function returns the **df.test** dataframe back to you, but with columns appended which are the individual-level estimates of the treatment effect on the primary outcome, **delta**; the residual treatment effect, **delta.s**; and the PTE, **R.s**. We can examine how the estimated PTE for individuals in the testing set varies using a simple histogram and a five number summary:
 ```{r}
 ggplot(obshet) + geom_histogram(aes(R.s), binwidth = 0.03) + xlab("R") + ylab("Count") + labs(title = "Distribution of Estimated PTE")
 fivenum(obshet$R.s)
@@ -126,17 +132,21 @@ Additionally, users can specify a **threshold** argument, which tests whether in
 obshet = obs.het.surr(df.train = obs_exampledata_train, df.test = obs_exampledata_test, type = "linear", var.want = TRUE, threshold = 0.5)
 head(obshet)
 ```
-The last column, **p.val**, is the p-value for testing PTE > 0.5 for that individual in the testing set. At this threshold, we identify a proportion of the testing set that demonstrates a sufficiently strong surrogate, at the 5% significance level:
+The last column, **p.val**, is the p-value for testing PTE > 0.5 (this is 0.5 because we set the threshold as 0.5) for that individual in the testing set. At this threshold, we identify individuals in the testing set for whom the surrogate is sufficiently strong (with PTE greater than your specified threshold):
 ```{r}
+# count of individuals in testing test with PTE>0.5
+sum(obshet$p.val < 0.05)
+
 # proportion of testing set where PTE > 0.5
 sum(obshet$p.val < 0.05) / nrow(obshet)
+
 ```
-Lastly, the **obs.het.surr** function includes a step that obtains fitted values for **S** in the control group. However, there might be cases where one prefers to use the actual observed values. This option is available by specifying **use.actual.control.S = TRUE**:
+Lastly, the **obs.het.surr** function includes a step that obtains and uses predicted values for **S** in the control group. However, there might be cases where one prefers to use the actual observed values in the control group (where they are truly observed). This option is available by specifying **use.actual.control.S = TRUE**:
 ```{r}
 obshet = obs.het.surr(df.train = obs_exampledata_train, df.test = obs_exampledata_test, type = "linear", use.actual.control.S = TRUE)
 head(obshet)
 ```
-While comparable to our original results, the estimated PTE is slightly updated for individuals in the control group, using this option.
+While comparable to our original results, the estimated PTE is slightly different for individuals in the control group when we use this option.
 
 That's all for now!
 
