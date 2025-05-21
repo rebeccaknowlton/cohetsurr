@@ -8,5 +8,5 @@
 
 More details on the randomized setting method are available in Knowlton R, Tian L, & Parast L. (2025). A General Framework to Assess Complex Heterogeneity in the Strength of a Surrogate Marker. Statistics in Medicine, 44(5), e70001. [doi:10.1002/sim.70001](https://doi.org/10.1002/sim.70001). More details on the observational setting will be available in: Knowlton, R., Parast, L. (2025) "Assessing Surrogate Heterogeneity in Real World Data Using Meta-Learners."
 
-Go here to view a tutorial for this package: [cohetsurr Tutorial](https://htmlpreview.github.io/?https://github.com/rebeccaknowlton/cohetsurr/blob/main/cohetsurr_tutorial.html )  
+Go here to view a tutorial for this package: [cohetsurr Tutorial](https://htmlpreview.github.io/?https://github.com/rebeccaknowlton/cohetsurr/blob/main/cohetsurr_tutorial.html). We also have a shiny app implementing these methods [here](https://parastlab.shinyapps.io/cohetsurrApp/).  
 
